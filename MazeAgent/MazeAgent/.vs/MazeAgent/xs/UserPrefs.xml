@@ -1,0 +1,32 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Startup/MazeRenderer.cs">
+    <Files>
+      <File FileName="Library/PackageCache/com.unity.ml-agents@2.0.0-exp.1/Runtime/Policies/BehaviorParameters.cs" Line="179" Column="1" />
+      <File FileName="Library/PackageCache/com.unity.ml-agents@2.0.0-exp.1/Runtime/Agent.cs" />
+      <File FileName="Assets/Startup/MazeRenderer.cs" Line="32" Column="20" />
+      <File FileName="Assets/Startup/MazeGenerator.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="MazeAgent" expanded="True">
+            <Node name="Assembly-CSharp" expanded="True">
+              <Node name="Assets" expanded="True">
+                <Node name="Startup" expanded="True">
+                  <Node name="MazeRenderer.cs" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="9dea80ce-d9b1-4d5b-a17c-aaa4ada1dd25" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
