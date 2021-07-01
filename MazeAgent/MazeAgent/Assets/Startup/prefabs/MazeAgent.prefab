@@ -97,6 +97,8 @@ GameObject:
   - component: {fileID: 4947060172182867437}
   - component: {fileID: 221657325261801149}
   - component: {fileID: 175715611757892640}
+  - component: {fileID: 7947156806228824564}
+  - component: {fileID: 6322802844317713925}
   m_Layer: 0
   m_Name: MazeAgent
   m_TagString: Untagged
@@ -165,6 +167,35 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  moveSpeed: 5
+  turnSpeed: 180
+--- !u!114 &7947156806228824564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4949950183732433345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
+--- !u!65 &6322802844317713925
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4949950183732433345}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0790739, y: 1.1031733, z: 1.0321853}
+  m_Center: {x: -0.6141982, y: 0.06759491, z: -1.447814}
 --- !u!1 &4949966415788902995
 GameObject:
   m_ObjectHideFlags: 0
