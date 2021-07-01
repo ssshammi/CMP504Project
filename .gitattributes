@@ -4,4 +4,5 @@
 *.meta binary
 */CommunicatorObjects/* binary
 */communicator_objects/* binary
+
 *.md text
