@@ -1,0 +1,9 @@
+cd C:\abertay\CMP504Project\source\CMP504Project
+
+conda activate ml-agents
+
+
+mlagents-learn config/ppo/Hallway.yaml --run-id=HallwayRun
+mlagents-learn config/ppo/GridWorld.yaml --run-id=GridWorldRun
+
+mlagents-learn config/ppo/Penguin.yaml --run-id Penguin_01

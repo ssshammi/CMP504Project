@@ -8,6 +8,14 @@ TagManager:
   - ground
   - target
   - agent
+  - food
+  - badFood
+  - symbol_X_Goal
+  - symbol_O_Goal
+  - symbol_O
+  - symbol_X
+  - baby
+  - fish
   layers:
   - Default
   - TransparentFX
