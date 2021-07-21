@@ -12,13 +12,15 @@ public class GameArea : MonoBehaviour
     [Tooltip("The TextMeshPro text that shows the cumulative reward of the agent")]
     public TextMeshPro cumulativeRewardText;
 
-    [Tooltip("Prefab of a live cheese")]
+    [Tooltip("Prefab of a target cheese")]
     public Unity.MLAgentsExamples.TargetController cheesePrefab;
 
     // [Tooltip("Prefab of the regurgitated cheese that appears when the chesee is rotten")]
     //public GameObject regurgitatedcheesePrefab;
 
     private List<GameObject> cheeseList;
+
+
 
     /// <summary>
     /// Reset the area, including cheese and mouse placement
@@ -106,7 +108,7 @@ public class GameArea : MonoBehaviour
         Rigidbody rigidbody = mazeAgent.GetComponent<Rigidbody>();
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
-        mazeAgent.transform.position = new Vector3(6f,2.4f,12f);
+        mazeAgent.transform.position = new Vector3(6f,2.4f,9.5f);
       //  mazeAgent.transform.position = ChooseRandomPosition(transform.position, 0f, 0f, 0f, 0f) ;
        // mazeAgent.transform.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f);
     }
@@ -121,8 +123,19 @@ public class GameArea : MonoBehaviour
     ///
     private void Spawncheese(int count, float cheeseSpeed)
     {
+
+          GameObject[] cheeseObjects;
+        cheeseObjects = GameObject.FindGameObjectsWithTag("target");
+
+        for (int i = 0; i < cheeseObjects.Length ; i++)
+        {
+
+              cheeseObjects[i].transform.SetParent(transform);
+                cheeseList.Add(cheeseObjects[i].transform.gameObject);
+        }
+
         return;
-        for (int i = 0; i < count; i++)
+       /* for (int i = 0; i < count; i++)
         {
             // Spawn and place the cheese
             GameObject cheeseObject = Instantiate<GameObject>(cheesePrefab.gameObject);
@@ -138,8 +151,39 @@ public class GameArea : MonoBehaviour
 
             // Set the cheese decay time
             //cheeseObject.GetComponent<cheese>().cheeseSpeed = cheeseSpeed;
-        }
+        }*/
     }
+    //we return the postion of the closet cheese asume rat has smell. because just with visit it not able to do anything
+    public Vector3 getPostionOfTarget(){
+
+
+        float minDistance = float.MaxValue;
+         GameObject closestFood = null;
+        for (int i = 0; i < cheeseList.Count; i++)
+        {
+
+
+
+            float thisDistance =Vector3.Distance(cheeseList[i].transform.position, mazeAgent.transform.position);
+            if (thisDistance < minDistance)
+            {
+             minDistance = thisDistance;
+             closestFood = cheeseList[i];
+            }
+
+        }
+        return closestFood.transform.position;
+
+    }
+
+      public int getNumberOfTarget(){
+
+
+       return cheeseList.Count;
+
+    }
+
+
 
     /// <summary>
     /// Called when the game starts

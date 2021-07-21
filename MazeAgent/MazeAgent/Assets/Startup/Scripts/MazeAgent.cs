@@ -6,7 +6,7 @@ using Unity.MLAgents.Sensors;
 public class MazeAgent : Agent
 {
     [Tooltip("How fast the agent moves forward")]
-    public float moveSpeed = 10f;
+    private float moveSpeed = 12f;
 
     [Tooltip("How fast the agent turns")]
     public float turnSpeed = 180f;
@@ -54,8 +54,8 @@ public class MazeAgent : Agent
 
         // Apply movement
         rigidbody.MovePosition(transform.position + transform.forward * forwardAmount * moveSpeed * Time.fixedDeltaTime);
-        transform.Rotate(transform.up * turnAmount  * Time.fixedDeltaTime);
-
+       // transform.Rotate(transform.up * turnAmount  * Time.fixedDeltaTime);
+        transform.Rotate(transform.up * turnAmount, Space.World ) ;
         // Apply a tiny negative reward every step to encourage action
         if (MaxStep > 0) AddReward(-1f / MaxStep);
     }
@@ -109,7 +109,9 @@ public class MazeAgent : Agent
         sensor.AddObservation(isFull);
 
 
+         sensor.AddObservation(gameArea.getNumberOfTarget());
 
+         // sensor.AddObservation(gameArea.getPostionOfTarget());
 
         // Direction mouse is facing (1 Vector3 = 3 values)
         sensor.AddObservation(transform.forward);
@@ -127,7 +129,7 @@ public class MazeAgent : Agent
         {
             // Try to eat the cheese
             Eatcheese(collision.gameObject);
-            CheckEnd();
+
         }
 
     }
@@ -144,6 +146,7 @@ public class MazeAgent : Agent
         gameArea.RemoveSpecificcheese(cheeseObject);
 
         AddReward(1f);
+        CheckEnd();
     }
 
     /// <summary>
@@ -168,7 +171,7 @@ public class MazeAgent : Agent
   //      isFull = false;
         // Spawn heart
         GameObject heart = Instantiate<GameObject>(heartPrefab);
-        heart.transform.parent = transform;
+        heart.transform.parent = transform.parent;
         heart.transform.position = transform.position + Vector3.up;
         Destroy(heart, 4f);
 
@@ -180,3 +183,8 @@ public class MazeAgent : Agent
         }
     }
 }
+
+//mlagents-learn config/ppo/MazeAgent.yaml --run-id MazeAgent_Ray
+
+//mlagents-learn config/ppo/MazeAgentRNN.yaml --run-id MazeAgent_RNA_Ray
+
