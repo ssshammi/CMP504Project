@@ -6,7 +6,7 @@ using Unity.MLAgents.Sensors;
 public class MazeAgent : Agent
 {
     [Tooltip("How fast the agent moves forward")]
-    private float moveSpeed = 12f;
+    private float moveSpeed = 6f;
 
     [Tooltip("How fast the agent turns")]
     public float turnSpeed = 180f;
@@ -53,11 +53,11 @@ public class MazeAgent : Agent
         }
 
         // Apply movement
-        rigidbody.MovePosition(transform.position + transform.forward * forwardAmount * moveSpeed * Time.fixedDeltaTime);
+        rigidbody.MovePosition(transform.position + transform.forward * forwardAmount * moveSpeed);
        // transform.Rotate(transform.up * turnAmount  * Time.fixedDeltaTime);
         transform.Rotate(transform.up * turnAmount, Space.World ) ;
         // Apply a tiny negative reward every step to encourage action
-        if (MaxStep > 0) AddReward(-1f / MaxStep);
+        if (MaxStep > 0) AddReward(1f / MaxStep);
     }
 
     /// <summary>
@@ -132,6 +132,13 @@ public class MazeAgent : Agent
 
         }
 
+        if (collision.transform.CompareTag("wall"))
+        {
+            // Try to eat the cheese
+
+        AddReward(-0.1f);
+        }
+
     }
 
     /// <summary>
@@ -145,7 +152,7 @@ public class MazeAgent : Agent
 
         gameArea.RemoveSpecificcheese(cheeseObject);
 
-        AddReward(1f);
+        AddReward(2.0f/gameArea.getNumberOfTarget());
         CheckEnd();
     }
 

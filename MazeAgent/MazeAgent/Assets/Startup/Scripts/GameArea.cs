@@ -30,7 +30,7 @@ public class GameArea : MonoBehaviour
         RemoveAllcheese();
         PlaceMouse();
 
-        Spawncheese(12, .5f);
+        Spawncheese(20, .5f);
     }
 
     /// <summary>
@@ -81,8 +81,29 @@ public class GameArea : MonoBehaviour
         return center + Quaternion.Euler(0f, angle, 0f) * Vector3.forward * radius;
     }
 
+
+  public static Vector3 ChooseRandomPositionCell(Vector3 center, float minDistance, float maxDistance)
+    {
+        float radius = minDistance;
+        float angle = maxDistance;
+
+        //if (maxRadius > minRadius)
+       // {
+            // Pick a random radius
+            radius = UnityEngine.Random.Range(0f, 10f) +6f;
+      //  }
+
+       // if (maxAngle > minAngle)
+      //  {
+            // Pick a random angle
+      //      angle = UnityEngine.Random.Range(minAngle, maxAngle);
+      //  }
+
+        // Center position + forward vector rotated around the Y axis by "angle" degrees, multiplies by "radius"
+            return new Vector3(Random.Range(0f, 1f) *100-minDistance, 0f,Random.Range(0f, 1f) *100+ minDistance) + center;
+    }
     /// <summary>
-    /// Remove all cheese from the area
+    /// Remove all cheese from the areaf
     /// </summary>
     private void RemoveAllcheese()
     {
@@ -124,7 +145,7 @@ public class GameArea : MonoBehaviour
     private void Spawncheese(int count, float cheeseSpeed)
     {
 
-          GameObject[] cheeseObjects;
+     /*     GameObject[] cheeseObjects;
         cheeseObjects = GameObject.FindGameObjectsWithTag("target");
 
         for (int i = 0; i < cheeseObjects.Length ; i++)
@@ -134,14 +155,14 @@ public class GameArea : MonoBehaviour
                 cheeseList.Add(cheeseObjects[i].transform.gameObject);
         }
 
-        return;
-       /* for (int i = 0; i < count; i++)
+        return;*/
+      for (int i = 0; i < count; i++)
         {
             // Spawn and place the cheese
             GameObject cheeseObject = Instantiate<GameObject>(cheesePrefab.gameObject);
             // add to random place on the maze
-            cheeseObject.transform.position = ChooseRandomPosition(transform.position, 100f, 260f, 2f, 13f) + Vector3.up * .5f;
-            cheeseObject.transform.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f);
+            cheeseObject.transform.position = ChooseRandomPositionCell( mazeAgent.transform.position , 6f, 6f) + Vector3.up * 1.1f;
+            cheeseObject.transform.rotation = Quaternion.Euler(0f,0f, 0f);
 
             // Set the cheese's parent to this area's transform
             cheeseObject.transform.SetParent(transform);
@@ -151,7 +172,7 @@ public class GameArea : MonoBehaviour
 
             // Set the cheese decay time
             //cheeseObject.GetComponent<cheese>().cheeseSpeed = cheeseSpeed;
-        }*/
+        }
     }
     //we return the postion of the closet cheese asume rat has smell. because just with visit it not able to do anything
     public Vector3 getPostionOfTarget(){
@@ -190,7 +211,7 @@ public class GameArea : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        //ResetArea();
+        ResetArea();
     }
 
     /// <summary>

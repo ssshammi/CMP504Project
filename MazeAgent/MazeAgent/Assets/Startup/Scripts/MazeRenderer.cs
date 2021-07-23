@@ -1,7 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Newtonsoft.Json;
 public class MazeRenderer : MonoBehaviour
 {
 
@@ -31,11 +31,14 @@ public class MazeRenderer : MonoBehaviour
     {
         size = size + 0.05f;
         var maze = MazeGenerator.Generate(width, height);
+        Debug.Log(JsonConvert.SerializeObject(maze));
         Draw(maze);
+
         mazeContainer.localScale =new Vector3(10, 0.5f, 10);
         mazeContainer.Translate(new Vector3(56.0f, 0.0f, 59.5f));
 
     }
+
 
     private void Draw(WallState[,] maze)
     {
