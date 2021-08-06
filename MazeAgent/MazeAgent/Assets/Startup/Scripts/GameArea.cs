@@ -21,7 +21,6 @@ public class GameArea : MonoBehaviour
     private List<GameObject> cheeseList;
 
 
-
     /// <summary>
     /// Reset the area, including cheese and mouse placement
     /// </summary>
@@ -100,7 +99,9 @@ public class GameArea : MonoBehaviour
       //  }
 
         // Center position + forward vector rotated around the Y axis by "angle" degrees, multiplies by "radius"
-            return new Vector3(Random.Range(0f, 1f) *100-minDistance, 0f,Random.Range(0f, 1f) *100+ minDistance) + center;
+           // return new Vector3(Random.Range(0f, 1f) *100-minDistance, 0f,Random.Range(0f, 1f) *100+ minDistance) + center;
+           Debug.Log(Random.Range(0, 9));
+            return new Vector3(Random.Range(0, 9) *minDistance, 0f,Random.Range(0, 9) * minDistance);
     }
     /// <summary>
     /// Remove all cheese from the areaf
@@ -161,7 +162,7 @@ public class GameArea : MonoBehaviour
             // Spawn and place the cheese
             GameObject cheeseObject = Instantiate<GameObject>(cheesePrefab.gameObject);
             // add to random place on the maze
-            cheeseObject.transform.position = ChooseRandomPositionCell( mazeAgent.transform.position , 6f, 6f) + Vector3.up * 1.1f;
+            cheeseObject.transform.position = ChooseRandomPositionCell( mazeAgent.transform.position , 6f, 6f) ;//+ Vector3.up * 1.1f
             cheeseObject.transform.rotation = Quaternion.Euler(0f,0f, 0f);
 
             // Set the cheese's parent to this area's transform

@@ -31,7 +31,10 @@ public class MazeRenderer : MonoBehaviour
     {
         size = size + 0.05f;
         var maze = MazeGenerator.Generate(width, height);
-        Debug.Log(JsonConvert.SerializeObject(maze));
+        Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.UP)));
+        Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.RIGHT)));
+
+         Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.LEFT)));
         Draw(maze);
 
         mazeContainer.localScale =new Vector3(10, 0.5f, 10);

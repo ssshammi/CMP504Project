@@ -14,8 +14,35 @@ public class MazeAgent : Agent
     [Tooltip("Prefab of the heart that appears when the mouse is fed")]
     public GameObject heartPrefab;
 
+     [ SerializeField]
+        internal Vector3Int m_GridSize = new Vector3Int(10, 1, 10);
+      [HideInInspector, SerializeField]
+        internal bool m_ShowGizmos = true;
+ /// <summary>
+        /// Whether to show gizmos or not.
+        /// </summary>
+        public bool ShowGizmos
+        {
+            get { return m_ShowGizmos; }
+            set { m_ShowGizmos = value; }
+        }
 
+     public Vector3Int GridSize
+        {
+            get { return m_GridSize; }
+            set
+            {
 
+                if (value.y != 1)
+                {
+                    m_GridSize = new Vector3Int(value.x, 1, value.z);
+                }
+                else
+                {
+                    m_GridSize = value;
+                }
+            }
+        }
     private GameArea gameArea;
     new private Rigidbody rigidbody;
 

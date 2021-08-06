@@ -73,7 +73,10 @@ namespace Unity.MLAgents.Editor
 
             EditorGUILayout.LabelField("Debug Gizmo", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(so.FindProperty(nameof(GridSensorComponent.m_ShowGizmos)), true);
+            EditorGUILayout.PropertyField(so.FindProperty(nameof(GridSensorComponent.m_GizmoXOffset)), true);
             EditorGUILayout.PropertyField(so.FindProperty(nameof(GridSensorComponent.m_GizmoYOffset)), true);
+
+            EditorGUILayout.PropertyField(so.FindProperty(nameof(GridSensorComponent.m_GizmZOffset)), true);
 
             // detectable objects
             var debugColors = so.FindProperty(nameof(GridSensorComponent.m_DebugColors));

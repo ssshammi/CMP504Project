@@ -8,7 +8,13 @@ mlagents-learn config/ppo/GridWorld.yaml --run-id=GridWorldRun
 
 mlagents-learn config/ppo/Penguin.yaml --run-id Penguin_01
 
-mlagents-learn config/ppo/MazeAgent.yaml --run-id MazeAgent_Ray2
+mlagents-learn config/ppo/MazeAgent.yaml --run-id MazeAgent_Ray3
 
 mlagents-learn config/ppo/MazeAgentRNN.yaml --run-id MazeAgent_RNA_Ray
+
+
+
+3,138.56
+5,348.44
+
 
