@@ -2,6 +2,7 @@
 using UnityEngine;
 using TMPro;
 
+
 public class GameArea : MonoBehaviour
 {
     [Tooltip("The agent inside the area")]
@@ -127,10 +128,13 @@ public class GameArea : MonoBehaviour
     /// </summary>
     private void PlaceMouse()
     {
-        Rigidbody rigidbody = mazeAgent.GetComponent<Rigidbody>();
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.angularVelocity = Vector3.zero;
-        mazeAgent.transform.position = new Vector3(6f,2.4f,6f);
+       //Rigidbody rigidbody = mazeAgent.GetComponent<Rigidbody>();
+        //rigidbody.velocity = Vector3.zero;
+        //rigidbody.angularVelocity = Vector3.zero;
+
+       mazeAgent.transform.position = new Vector3(5f,2.4f,5f);
+       // rigidbody.MovePosition( new Vector3(5f,2.4f,5f)+ transform.forward );
+
       //  mazeAgent.transform.position = ChooseRandomPosition(transform.position, 0f, 0f, 0f, 0f) ;
        // mazeAgent.transform.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f);
     }
@@ -225,3 +229,4 @@ public class GameArea : MonoBehaviour
     }
 
 }
+

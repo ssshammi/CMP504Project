@@ -7,7 +7,7 @@ using Unity.MLAgents.Sensors.Reflection;
 public class MazeAgent : Agent
 {
     [Tooltip("How fast the agent moves forward")]
-    private float moveSpeed = 6f;
+    private float moveSpeed =5f;
 
     [Tooltip("How fast the agent turns")]
     public float turnSpeed = 180f;
@@ -49,11 +49,25 @@ public class MazeAgent : Agent
 
     public struct Position
 {
-    public int X;
-    public int Y;
+    public int row;
+    public int collum;
 }
+
+public enum Direction
+{
+    North = 1,
+    South = 2, // 0010
+    East = 4, // 0100
+    West = 8,
+}
+
  [Observable]
-private Position currentCell;
+public Direction currentDirection;
+ [Observable]
+public int[] currentCellPosition = new int[2];
+
+[Observable]
+public int[,] agentMemory;
 
     private bool isFull; // If true, mouse has a full stomach
 
@@ -66,9 +80,10 @@ private Position currentCell;
         gameArea = GetComponentInParent<GameArea>();
 
         rigidbody = GetComponent<Rigidbody>();
-        currentCell.X = 0;
-        currentCell.Y = 0;
 
+    currentCellPosition[0] =1;
+    currentCellPosition[1] =1;
+    currentDirection = Direction.North;
     }
 
     /// <summary>
@@ -91,9 +106,17 @@ private Position currentCell;
             turnAmount = 90f;
         }
 
+
+
         // Apply movement
-        rigidbody.MovePosition(transform.position + transform.forward * forwardAmount * moveSpeed);
+
+        transform.position = (transform.position +transform.forward*forwardAmount  *moveSpeed) ;//* moveSpeed
+         if(forwardAmount == 1f){
+       Debug.Log(transform.position +"the forwardAmount is "+transform.forward);
+        }
+
        // transform.Rotate(transform.up * turnAmount  * Time.fixedDeltaTime);
+       if(turnAmount!=0f)
         transform.Rotate(transform.up * turnAmount, Space.World ) ;
         // Apply a tiny negative reward every step to encourage action
         if (MaxStep > 0) AddReward(1f / MaxStep);
@@ -108,17 +131,18 @@ private Position currentCell;
     {
         int forwardAction = 0;
         int turnAction = 0;
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyUp(KeyCode.W))
         {
             // move forward
             forwardAction = 1;
+             Debug.Log("forward was pressed "+forwardAction);
         }
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyUp(KeyCode.A))
         {
             // turn left
             turnAction = 1;
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKeyUp(KeyCode.D))
         {
             // turn right
             turnAction = 2;
@@ -175,7 +199,7 @@ private Position currentCell;
         {
             // Try to eat the cheese
 
-        AddReward(-0.1f);
+        AddReward(-1.0f);
         }
 
     }

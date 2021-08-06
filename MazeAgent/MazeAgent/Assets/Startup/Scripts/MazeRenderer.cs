@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+
 public class MazeRenderer : MonoBehaviour
 {
 
@@ -26,6 +27,8 @@ public class MazeRenderer : MonoBehaviour
     [SerializeField]
     private Transform floorPrefab = null;
 
+
+    private WallState[,] mazememory;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,10 +39,21 @@ public class MazeRenderer : MonoBehaviour
 
          Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.LEFT)));
         Draw(maze);
-
+        mazememory =maze;
         mazeContainer.localScale =new Vector3(10, 0.5f, 10);
         mazeContainer.Translate(new Vector3(56.0f, 0.0f, 56f));
 
+    }
+    //return a grid in visited flag flase
+    public WallState[,] getMaze(){
+
+       /* foreach(var row in mazememory){
+              foreach(WallState cell in row)
+
+           cell |= WallState.VISITED;
+        }*/
+
+        return mazememory;
     }
 
 
