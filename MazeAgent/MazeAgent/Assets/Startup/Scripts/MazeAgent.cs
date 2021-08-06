@@ -2,6 +2,7 @@
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Sensors.Reflection;
 
 public class MazeAgent : Agent
 {
@@ -46,6 +47,14 @@ public class MazeAgent : Agent
     private GameArea gameArea;
     new private Rigidbody rigidbody;
 
+    public struct Position
+{
+    public int X;
+    public int Y;
+}
+ [Observable]
+private Position currentCell;
+
     private bool isFull; // If true, mouse has a full stomach
 
     /// <summary>
@@ -57,6 +66,9 @@ public class MazeAgent : Agent
         gameArea = GetComponentInParent<GameArea>();
 
         rigidbody = GetComponent<Rigidbody>();
+        currentCell.X = 0;
+        currentCell.Y = 0;
+
     }
 
     /// <summary>

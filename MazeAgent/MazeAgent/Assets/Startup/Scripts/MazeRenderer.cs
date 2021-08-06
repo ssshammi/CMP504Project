@@ -38,7 +38,7 @@ public class MazeRenderer : MonoBehaviour
         Draw(maze);
 
         mazeContainer.localScale =new Vector3(10, 0.5f, 10);
-        mazeContainer.Translate(new Vector3(56.0f, 0.0f, 59.5f));
+        mazeContainer.Translate(new Vector3(56.0f, 0.0f, 56f));
 
     }
 
