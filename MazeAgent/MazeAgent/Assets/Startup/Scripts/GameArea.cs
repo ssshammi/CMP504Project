@@ -30,7 +30,7 @@ public class GameArea : MonoBehaviour
         RemoveAllcheese();
         PlaceMouse();
 
-        Spawncheese(15, .5f);
+        Spawncheese(10, .5f);
     }
 
     /// <summary>

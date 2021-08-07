@@ -120,8 +120,61 @@ public int[,] agentMemory;
         transform.Rotate(transform.up * turnAmount, Space.World ) ;
         // Apply a tiny negative reward every step to encourage action
         if (MaxStep > 0) AddReward(1f / MaxStep);
+        else{
+         AddReward(-1.0f); // not able to complete in 200 steps
+        EndEpisode();
+         }
     }
 
+    [Tooltip("Selecting will turn on action masking. Note that a model trained with action " +
+        "masking turned on may not behave optimally when action masking is turned off.")]
+    public bool maskActions = true;
+  public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
+    {
+        // Mask the necessary actions if selected by the user.
+        if (maskActions)
+        {
+
+            // Prevents the agent from picking an action that would make it collide with a wall
+           RayPerceptionSensorComponent3D raySensor = this.GetComponent<RayPerceptionSensorComponent3D>();
+           // sensor.RayLength  ;
+            //RayPerceptionOutput
+            var rayOutputs = RayPerceptionSensor
+                .Perceive(raySensor.GetRayPerceptionInput())
+                .RayOutputs;
+
+            var lengthOfRayOutputs = RayPerceptionSensor
+                .Perceive(raySensor.GetRayPerceptionInput())
+                .RayOutputs
+                .Length;
+            Debug.Log(rayOutputs[0].HitTagIndex+"the ray length is "+0);
+             Debug.Log(rayOutputs[1].HitTagIndex+"the ray length is "+1);
+              Debug.Log(rayOutputs[2].HitTagIndex+"the ray length is "+2);
+
+        /*    if (rayOutputs[2].HitTagIndex ==0)
+            {
+                actionMask.SetActionEnabled(1, 1, false); // no left
+            }else
+             actionMask.SetActionEnabled(1, 1, true); // no left
+
+            if (rayOutputs[1].HitTagIndex ==0)
+            {
+                actionMask.SetActionEnabled(1, 2, false);// no right
+            }else
+            actionMask.SetActionEnabled(1, 2, true);// no right
+        */
+            if (rayOutputs[0].HitTagIndex ==0)
+            {
+                actionMask.SetActionEnabled(0, 1, false); //no forward
+            }else
+             actionMask.SetActionEnabled(0, 1, true); //no forward
+
+           /* if ( tempState.HasFlag(WallState.DOWN))
+            {
+                actionMask.SetActionEnabled(0, k_Up, false);
+            }*/
+        }
+    }
     /// <summary>
     /// Read inputs from the keyboard and convert them to a list of actions.
     /// This is called only when the player wants to control the agent and has set
@@ -215,7 +268,7 @@ public int[,] agentMemory;
 
         gameArea.RemoveSpecificcheese(cheeseObject);
 
-        AddReward(2.0f/gameArea.getNumberOfTarget());
+        AddReward(10.0f/gameArea.getNumberOfTarget());
         CheckEnd();
     }
 

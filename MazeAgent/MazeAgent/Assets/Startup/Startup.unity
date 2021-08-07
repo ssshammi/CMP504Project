@@ -2137,7 +2137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1568376444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2996,11 +2996,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3149530363150167613, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_RayLength
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3149530363150167613, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_MaxRayDegrees
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3149530363150167613, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
+      propertyPath: m_SphereCastRadius
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3149530363150167613, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_StartVerticalOffset
@@ -3008,7 +3012,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3149530363150167613, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_DetectableTags.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3149530363150167613, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_DetectableTags.Array.data[3]
@@ -3044,7 +3048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4922172178938915795, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: MaxStep
-      value: 10000
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 4922172178938915795, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_Enabled
