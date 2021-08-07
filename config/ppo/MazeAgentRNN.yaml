@@ -1,13 +1,12 @@
 behaviors:
     MazeAgent:
         trainer_type: ppo
-        
         hyperparameters:
          # Hyperparameters common to PPO and SAC
             batch_size: 128
             buffer_size: 2048
             learning_rate: 0.0003
-              learning_rate_schedule: linear
+            learning_rate_schedule: linear
             
             
               # PPO-specific hyperparameters
@@ -27,19 +26,19 @@ behaviors:
             vis_encode_type: simple
             
              # memory
-      memory:
-        sequence_length: 64
-        memory_size: 256
+       # memory:
+       #     sequence_length: 64
+       #     memory_size: 256
         
         
         # Trainer configurations common to all trainers
    # max_steps: 5.0e5
-   max_steps: 1000000
-    time_horizon: 128
-     summary_freq: 500
-    keep_checkpoints: 5
-    checkpoint_interval: 50000
-     threaded: true
+        max_steps: 1000000
+        time_horizon: 128
+        summary_freq: 500
+        keep_checkpoints: 5
+        checkpoint_interval: 50000
+        threaded: true
      #init_path: null
     
     # behavior cloning
@@ -50,7 +49,7 @@ behaviors:
        #  batch_size: 512
      #    num_epoch: 3
       #   samples_per_update: 0
- 
+                 
         reward_signals:
          # environment reward (default) 
             extrinsic:
