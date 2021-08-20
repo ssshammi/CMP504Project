@@ -3,72 +3,79 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Sensors.Reflection;
-
+using System.Linq;
 public class MazeAgent : Agent
 {
     [Tooltip("How fast the agent moves forward")]
-    private float moveSpeed =5f;
+    private float moveSpeed = 10f;
 
     [Tooltip("How fast the agent turns")]
-    public float turnSpeed = 180f;
+    public float turnSpeed = 180f; //not used
 
     [Tooltip("Prefab of the heart that appears when the mouse is fed")]
     public GameObject heartPrefab;
 
-     [ SerializeField]
-        internal Vector3Int m_GridSize = new Vector3Int(10, 1, 10);
-      [HideInInspector, SerializeField]
-        internal bool m_ShowGizmos = true;
- /// <summary>
-        /// Whether to show gizmos or not.
-        /// </summary>
-        public bool ShowGizmos
-        {
-            get { return m_ShowGizmos; }
-            set { m_ShowGizmos = value; }
-        }
+    [SerializeField]
+    internal Vector3Int m_GridSize = new Vector3Int(10, 1, 10);
+    [HideInInspector, SerializeField]
+    internal bool m_ShowGizmos = true;
+    /// <summary>
+    /// Whether to show gizmos or not.
+    /// </summary>
+    public bool ShowGizmos
+    {
+        get { return m_ShowGizmos; }
+        set { m_ShowGizmos = value; }
+    }
 
-     public Vector3Int GridSize
+    public Vector3Int GridSize
+    {
+        get { return m_GridSize; }
+        set
         {
-            get { return m_GridSize; }
-            set
+
+            if (value.y != 1)
             {
-
-                if (value.y != 1)
-                {
-                    m_GridSize = new Vector3Int(value.x, 1, value.z);
-                }
-                else
-                {
-                    m_GridSize = value;
-                }
+                m_GridSize = new Vector3Int(value.x, 1, value.z);
+            }
+            else
+            {
+                m_GridSize = value;
             }
         }
+    }
     private GameArea gameArea;
     new private Rigidbody rigidbody;
 
     public struct Position
-{
-    public int row;
-    public int collum;
-}
+    {
+        public int row;
+        public int collum;
+    }
 
-public enum Direction
-{
-    North = 1,
-    South = 2, // 0010
-    East = 4, // 0100
-    West = 8,
-}
+    public enum Direction
+    {
+        // 0000 -> NO WALLS
+        // 1111 -> LEFT,RIGHT,UP,DOWN
 
- [Observable]
-public Direction currentDirection;
- [Observable]
-public int[] currentCellPosition = new int[2];
+        LEFT = 1, // 0001
+        RIGHT = 2, // 0010
+        UP = 4, // 0100
+        DOWN = 8, // 1000
 
-[Observable]
-public int[,] agentMemory;
+    }
 
+    [Observable]
+    public Direction currentDirection;
+    [Observable]
+    public int[] currentCellPosition = new int[2];
+
+    [Observable]
+    public WallState[,] gridLayout;
+
+    public GameArea mazeArea;
+    public float timeBetweenDecisionsAtInference;
+    float m_TimeSinceDecision;
     private bool isFull; // If true, mouse has a full stomach
 
     /// <summary>
@@ -78,12 +85,12 @@ public int[,] agentMemory;
     {
         base.Initialize();
         gameArea = GetComponentInParent<GameArea>();
-
+        gridLayout = mazeArea.mazeMap.GetComponent<MazeRenderer>().getMaze();
         rigidbody = GetComponent<Rigidbody>();
 
-    currentCellPosition[0] =1;
-    currentCellPosition[1] =1;
-    currentDirection = Direction.North;
+        currentCellPosition[0] = 0;
+        currentCellPosition[1] = 0;
+        currentDirection = Direction.UP;
     }
 
     /// <summary>
@@ -108,36 +115,54 @@ public int[,] agentMemory;
 
 
 
-        // Apply movement
 
-        transform.position = (transform.position +transform.forward*forwardAmount  *moveSpeed) ;//* moveSpeed
-         if(forwardAmount == 1f){
-       Debug.Log(transform.position +"the forwardAmount is "+transform.forward);
+        if (forwardAmount == k_Up)
+        {
+            // Apply movement
+
+            transform.position = (transform.position + transform.forward * moveSpeed);//* moveSpeed
+            Debug.Log(transform.position + "the forwardAmount is " + transform.forward);
         }
 
-       // transform.Rotate(transform.up * turnAmount  * Time.fixedDeltaTime);
-       if(turnAmount!=0f)
-        transform.Rotate(transform.up * turnAmount, Space.World ) ;
+        // transform.Rotate(transform.up * turnAmount  * Time.fixedDeltaTime);
+        if (turnAmount != 0f)
+            transform.Rotate(transform.up * turnAmount, Space.World);
         // Apply a tiny negative reward every step to encourage action
-        if (MaxStep > 0) AddReward(1f / MaxStep);
-        else{
-         AddReward(-1.0f); // not able to complete in 200 steps
-        EndEpisode();
-         }
+        if (MaxStep > 0)
+        {
+            AddReward(-1f / MaxStep);
+        }
+        else
+        {
+            AddReward(-0.02f); // not able to complete in 200 steps
+            EndEpisode();
+        }
     }
+    /*void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
 
+        //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
+        Gizmos.DrawWireCube(transform.position, new Vector3(0f, 0, 5f) * 5f);
+    }*/
     [Tooltip("Selecting will turn on action masking. Note that a model trained with action " +
         "masking turned on may not behave optimally when action masking is turned off.")]
     public bool maskActions = true;
-  public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
+    const int k_NoAction = 0;  // do nothing!
+    const int k_Up = 1;
+    const int k_Down = 4;
+    const int k_Left = 2;
+    const int k_Right = 3;
+    public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
     {
         // Mask the necessary actions if selected by the user.
         if (maskActions)
         {
 
             // Prevents the agent from picking an action that would make it collide with a wall
-           RayPerceptionSensorComponent3D raySensor = this.GetComponent<RayPerceptionSensorComponent3D>();
-           // sensor.RayLength  ;
+            RayPerceptionSensorComponent3D raySensor = this.GetComponent<RayPerceptionSensorComponent3D>();
+            // sensor.RayLength  ;
             //RayPerceptionOutput
             var rayOutputs = RayPerceptionSensor
                 .Perceive(raySensor.GetRayPerceptionInput())
@@ -147,32 +172,41 @@ public int[,] agentMemory;
                 .Perceive(raySensor.GetRayPerceptionInput())
                 .RayOutputs
                 .Length;
-            Debug.Log(rayOutputs[0].HitTagIndex+"the ray length is "+0);
-             Debug.Log(rayOutputs[1].HitTagIndex+"the ray length is "+1);
-              Debug.Log(rayOutputs[2].HitTagIndex+"the ray length is "+2);
+            Debug.Log(rayOutputs[0].HitTagIndex + "the ray length is " + 0);
+            Debug.Log(rayOutputs[1].HitTagIndex + "the ray length is " + 1);
+            Debug.Log(rayOutputs[2].HitTagIndex + "the ray length is " + 2);
 
-        /*    if (rayOutputs[2].HitTagIndex ==0)
-            {
-                actionMask.SetActionEnabled(1, 1, false); // no left
-            }else
-             actionMask.SetActionEnabled(1, 1, true); // no left
+            /*    if (rayOutputs[2].HitTagIndex ==0)
+                {
+                    actionMask.SetActionEnabled(1, 1, false); // no left
+                }else
+                 actionMask.SetActionEnabled(1, 1, true); // no left
 
-            if (rayOutputs[1].HitTagIndex ==0)
+                if (rayOutputs[1].HitTagIndex ==0)
+                {
+                    actionMask.SetActionEnabled(1, 2, false);// no right
+                }else
+                actionMask.SetActionEnabled(1, 2, true);// no right
+                */
+            if (rayOutputs[0].HitTagIndex == 0)
             {
-                actionMask.SetActionEnabled(1, 2, false);// no right
-            }else
-            actionMask.SetActionEnabled(1, 2, true);// no right
-        */
-            if (rayOutputs[0].HitTagIndex ==0)
-            {
-                actionMask.SetActionEnabled(0, 1, false); //no forward
-            }else
-             actionMask.SetActionEnabled(0, 1, true); //no forward
+                //branch  //actionsToDisable
+                actionMask.SetActionEnabled(0, k_Up, false); //no forward
+            }
 
-           /* if ( tempState.HasFlag(WallState.DOWN))
+            /* if ( tempState.HasFlag(WallState.DOWN))
+             {
+                 actionMask.SetActionEnabled(0, k_Up, false);
+             }
+            var hit = Physics.OverlapBox(transform.position, new Vector3(0f, 0, 5f) * 5f);
+            if (hit.Where(col => col.gameObject.CompareTag("wall")).ToArray().Length == 0)
             {
-                actionMask.SetActionEnabled(0, k_Up, false);
+
+                actionMask.SetActionEnabled(0, k_Up, false); //no forward
             }*/
+
+
+
         }
     }
     /// <summary>
@@ -184,26 +218,51 @@ public int[,] agentMemory;
     {
         int forwardAction = 0;
         int turnAction = 0;
-        if (Input.GetKeyUp(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
             // move forward
             forwardAction = 1;
-             Debug.Log("forward was pressed "+forwardAction);
+            Debug.Log("forward was pressed " + forwardAction);
+            actionsOut.DiscreteActions.Array[0] = k_Up;
         }
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             // turn left
             turnAction = 1;
+            actionsOut.DiscreteActions.Array[1] = turnAction;
         }
-        else if (Input.GetKeyUp(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
             // turn right
             turnAction = 2;
+            actionsOut.DiscreteActions.Array[1] = turnAction;
         }
 
+        /*  if (Input.GetKey(KeyCode.A))
+          {
+              // turn left
+              turnAction = 1;
+              actionsOut.DiscreteActions.Array[0] = k_Left;
+              actionsOut.DiscreteActions.Array[1] = turnAction;
+          }
+
+          else if (Input.GetKey(KeyCode.D))
+          {
+              // turn right
+              turnAction = 2;
+              ctionsOut.DiscreteActions.Array[0] = k_Right;
+              actionsOut.DiscreteActions.Array[1] = turnAction;
+          }
+          else if (Input.GetKey(KeyCode.S))
+          {
+              // turn right
+              turnAction = 3;
+              actionsOut.DiscreteActions.Array[0] = k_Down;
+              actionsOut.DiscreteActions.Array[1] = turnAction;
+          }*/
         // Put the actions into the array
-        actionsOut.DiscreteActions.Array[0] = forwardAction;
-        actionsOut.DiscreteActions.Array[1] = turnAction;
+
+
     }
 
     /// <summary>
@@ -225,9 +284,9 @@ public int[,] agentMemory;
         sensor.AddObservation(isFull);
 
 
-         sensor.AddObservation(gameArea.getNumberOfTarget());
+        sensor.AddObservation(gameArea.getNumberOfTarget());
 
-         // sensor.AddObservation(gameArea.getPostionOfTarget());
+        // sensor.AddObservation(gameArea.getPostionOfTarget());
 
         // Direction mouse is facing (1 Vector3 = 3 values)
         sensor.AddObservation(transform.forward);
@@ -252,7 +311,7 @@ public int[,] agentMemory;
         {
             // Try to eat the cheese
 
-        AddReward(-1.0f);
+            AddReward(-0.1f);
         }
 
     }
@@ -264,35 +323,35 @@ public int[,] agentMemory;
     private void Eatcheese(GameObject cheeseObject)
     {
         if (isFull) return; // Can't eat another cheese while full
-       // isFull = true; // need to  define max hunger
+                            // isFull = true; // need to  define max hunger
 
         gameArea.RemoveSpecificcheese(cheeseObject);
 
-        AddReward(10.0f/gameArea.getNumberOfTarget());
+        AddReward(10.0f / gameArea.getNumberOfTarget());
         CheckEnd();
     }
 
     /// <summary>
     /// Check if agent is full, if yes, exit the maze
     /// </summary>
-   /* private void Regurgitatecheese()
+    /* private void Regurgitatecheese()
+     {
+         if (!isFull) return; // Nothing to regurgitate
+         isFull = false;
+
+
+         // Spawn regurgitated cheese
+         GameObject regurgitatedcheese = Instantiate<GameObject>(regurgitatedcheesePrefab);
+         regurgitatedcheese.transform.parent = transform.parent;
+         regurgitatedcheese.transform.position = transform.position;
+         Destroy(regurgitatedcheese, 4f);
+         AddReward(-1.0f);
+     }*/
+    private void CheckEnd()
     {
         if (!isFull) return; // Nothing to regurgitate
-        isFull = false;
-
-
-        // Spawn regurgitated cheese
-        GameObject regurgitatedcheese = Instantiate<GameObject>(regurgitatedcheesePrefab);
-        regurgitatedcheese.transform.parent = transform.parent;
-        regurgitatedcheese.transform.position = transform.position;
-        Destroy(regurgitatedcheese, 4f);
-        AddReward(-1.0f);
-    }*/
-  private void CheckEnd()
-    {
-    if (!isFull) return; // Nothing to regurgitate
-  //      isFull = false;
-        // Spawn heart
+                             //      isFull = false;
+                             // Spawn heart
         GameObject heart = Instantiate<GameObject>(heartPrefab);
         heart.transform.parent = transform.parent;
         heart.transform.position = transform.position + Vector3.up;
@@ -305,6 +364,31 @@ public int[,] agentMemory;
             EndEpisode();
         }
     }
+    public void FixedUpdate()
+    {
+        WaitTimeInference();
+    }
+    void WaitTimeInference()
+    {
+
+        if (Academy.Instance.IsCommunicatorOn)
+        {
+            RequestDecision();
+        }
+        else
+        {
+            if (m_TimeSinceDecision >= timeBetweenDecisionsAtInference)
+            {
+                m_TimeSinceDecision = 0f;
+                RequestDecision();
+            }
+            else
+            {
+                m_TimeSinceDecision += Time.fixedDeltaTime;
+            }
+        }
+    }
+
 }
 
 //mlagents-learn config/ppo/MazeAgent.yaml --run-id MazeAgent_Ray

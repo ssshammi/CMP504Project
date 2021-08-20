@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3836793085241645916}
   - component: {fileID: 3868551391811062596}
   - component: {fileID: 3826955612593018128}
-  - component: {fileID: 3858402326794362026}
   - component: {fileID: 3631016866778687563}
   m_Layer: 0
   m_Name: StaticTarget
@@ -97,22 +96,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &3858402326794362026
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3840539935788495952}
-  serializedVersion: 2
-  m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 3
 --- !u!114 &3631016866778687563
 MonoBehaviour:
   m_ObjectHideFlags: 0

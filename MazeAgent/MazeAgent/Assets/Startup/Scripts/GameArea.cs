@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using Unity.MLAgentsExamples;
 
 public class GameArea : MonoBehaviour
 {
     [Tooltip("The agent inside the area")]
     public MazeAgent mazeAgent;
+    public MazeRenderer mazeMap;
 
 
 
@@ -82,27 +83,34 @@ public class GameArea : MonoBehaviour
     }
 
 
-  public static Vector3 ChooseRandomPositionCell(Vector3 center, float minDistance, float maxDistance)
+    public int[] ChooseRandomPositionCell()
     {
-        float radius = minDistance;
-        float angle = maxDistance;
+        int[] cellPos = { UnityEngine.Random.Range(2, 11), UnityEngine.Random.Range(1, 11) };
+        return cellPos;
+    }
+    public static Vector3 setRandomPositionCell(int[] cellPos, Vector3 center, float minDistance, float maxDistance)
+    {
 
-        //if (maxRadius > minRadius)
-       // {
-            // Pick a random radius
-            radius = UnityEngine.Random.Range(0f, 10f) +6f;
-      //  }
+        /* float radius = minDistance;
+         float angle = maxDistance;
 
-       // if (maxAngle > minAngle)
-      //  {
-            // Pick a random angle
-      //      angle = UnityEngine.Random.Range(minAngle, maxAngle);
-      //  }
+         //if (maxRadius > minRadius)
+         // {
+         // Pick a random radius
+         radius = UnityEngine.Random.Range(0f, 10f) + 6f;
+         //  }
+
+         // if (maxAngle > minAngle)
+         //  {
+         // Pick a random angle
+         //      angle = UnityEngine.Random.Range(minAngle, maxAngle);
+         //  }
+         */
 
         // Center position + forward vector rotated around the Y axis by "angle" degrees, multiplies by "radius"
-           // return new Vector3(Random.Range(0f, 1f) *100-minDistance, 0f,Random.Range(0f, 1f) *100+ minDistance) + center;
-           Debug.Log(Random.Range(1, 11));
-            return new Vector3(Random.Range(1, 11)*10 -minDistance, 0f,Random.Range(1, 11) *10- minDistance+2f);
+        // return new Vector3(Random.Range(0f, 1f) *100-minDistance, 0f,Random.Range(0f, 1f) *100+ minDistance) + center;
+        Debug.Log(cellPos);
+        return new Vector3(cellPos[0] * 10 - minDistance, 0.5f, cellPos[1] * 10 - minDistance + 2f);
     }
     /// <summary>
     /// Remove all cheese from the areaf
@@ -128,15 +136,15 @@ public class GameArea : MonoBehaviour
     /// </summary>
     private void PlaceMouse()
     {
-       //Rigidbody rigidbody = mazeAgent.GetComponent<Rigidbody>();
+        //Rigidbody rigidbody = mazeAgent.GetComponent<Rigidbody>();
         //rigidbody.velocity = Vector3.zero;
         //rigidbody.angularVelocity = Vector3.zero;
 
-       mazeAgent.transform.position = new Vector3(5f,2.4f,5f);
-       // rigidbody.MovePosition( new Vector3(5f,2.4f,5f)+ transform.forward );
+        mazeAgent.transform.position = new Vector3(5f, 2.4f, 5f);
+        // rigidbody.MovePosition( new Vector3(5f,2.4f,5f)+ transform.forward );
 
-      //  mazeAgent.transform.position = ChooseRandomPosition(transform.position, 0f, 0f, 0f, 0f) ;
-       // mazeAgent.transform.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f);
+        //  mazeAgent.transform.position = ChooseRandomPosition(transform.position, 0f, 0f, 0f, 0f) ;
+        // mazeAgent.transform.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f);
     }
 
 
@@ -150,24 +158,25 @@ public class GameArea : MonoBehaviour
     private void Spawncheese(int count, float cheeseSpeed)
     {
 
-     /*     GameObject[] cheeseObjects;
-        cheeseObjects = GameObject.FindGameObjectsWithTag("target");
+        /*     GameObject[] cheeseObjects;
+           cheeseObjects = GameObject.FindGameObjectsWithTag("target");
 
-        for (int i = 0; i < cheeseObjects.Length ; i++)
-        {
+           for (int i = 0; i < cheeseObjects.Length ; i++)
+           {
 
-              cheeseObjects[i].transform.SetParent(transform);
-                cheeseList.Add(cheeseObjects[i].transform.gameObject);
-        }
+                 cheeseObjects[i].transform.SetParent(transform);
+                   cheeseList.Add(cheeseObjects[i].transform.gameObject);
+           }
 
-        return;*/
-      for (int i = 0; i < count; i++)
+           return;*/
+        for (int i = 0; i < count; i++)
         {
             // Spawn and place the cheese
             GameObject cheeseObject = Instantiate<GameObject>(cheesePrefab.gameObject);
             // add to random place on the maze
-            cheeseObject.transform.position = ChooseRandomPositionCell( mazeAgent.transform.position , 6f, 4f) ;//+ Vector3.up * 1.1f
-            cheeseObject.transform.rotation = Quaternion.Euler(0f,0f, 0f);
+            cheeseObject.GetComponent<TargetController>().setTargetProperties(ChooseRandomPositionCell());
+            cheeseObject.transform.position = setRandomPositionCell(cheeseObject.GetComponent<TargetController>().currentCellPosition, mazeAgent.transform.position, 6f, 4f);//+ Vector3.up * 1.1f
+            cheeseObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
             // Set the cheese's parent to this area's transform
             cheeseObject.transform.SetParent(transform);
@@ -180,21 +189,22 @@ public class GameArea : MonoBehaviour
         }
     }
     //we return the postion of the closet cheese asume rat has smell. because just with visit it not able to do anything
-    public Vector3 getPostionOfTarget(){
+    public Vector3 getPostionOfTarget()
+    {
 
 
         float minDistance = float.MaxValue;
-         GameObject closestFood = null;
+        GameObject closestFood = null;
         for (int i = 0; i < cheeseList.Count; i++)
         {
 
 
 
-            float thisDistance =Vector3.Distance(cheeseList[i].transform.position, mazeAgent.transform.position);
+            float thisDistance = Vector3.Distance(cheeseList[i].transform.position, mazeAgent.transform.position);
             if (thisDistance < minDistance)
             {
-             minDistance = thisDistance;
-             closestFood = cheeseList[i];
+                minDistance = thisDistance;
+                closestFood = cheeseList[i];
             }
 
         }
@@ -202,10 +212,11 @@ public class GameArea : MonoBehaviour
 
     }
 
-      public int getNumberOfTarget(){
+    public int getNumberOfTarget()
+    {
 
 
-       return cheeseList.Count;
+        return cheeseList.Count;
 
     }
 

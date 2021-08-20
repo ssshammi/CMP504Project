@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Startup/Startup.unity
+- path: Assets/GridWorld/Scenes/GridWorld.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

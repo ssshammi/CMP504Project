@@ -14,7 +14,7 @@ namespace Unity.MLAgentsExamples
     {
 
         [Header("Collider Tag To Detect")]
-        public string tagToDetect = "agent"; //collider tag to detect 
+        public string tagToDetect = "agent"; //collider tag to detect
 
         [Header("Target Placement")]
         public float spawnRadius; //The radius in which a target can be randomly spawned.
@@ -22,9 +22,9 @@ namespace Unity.MLAgentsExamples
 
         [Header("Target Fell Protection")]
         public bool respawnIfFallsOffPlatform = true; //If the target falls off the platform, reset the position.
-        public float fallDistance = 5; //distance below the starting height that will trigger a respawn 
+        public float fallDistance = 5; //distance below the starting height that will trigger a respawn
 
-
+        public int[] currentCellPosition; //position of food in grid
         private Vector3 m_startingPos; //the starting position of the target
         private Agent m_agentTouching; //the agent currently touching the target
 
@@ -58,6 +58,12 @@ namespace Unity.MLAgentsExamples
             }
         }
 
+        private void Awake()
+        {
+            currentCellPosition = new int[2];
+            currentCellPosition[0] = 0;
+            currentCellPosition[1] = 0;
+        }
         void Update()
         {
             if (respawnIfFallsOffPlatform)
@@ -68,6 +74,12 @@ namespace Unity.MLAgentsExamples
                     MoveTargetToRandomPosition();
                 }
             }
+        }
+        public void setTargetProperties(int[] cellPos)
+        {
+            currentCellPosition[0] = cellPos[0];
+            currentCellPosition[1] = cellPos[1];
+
         }
 
         /// <summary>
