@@ -2882,6 +2882,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2046925657}
     m_Modifications:
+    - target: {fileID: 17691611632178718, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
+      propertyPath: m_ObservationSize
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 90757863061630191, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_Mass
       value: 1
@@ -2916,7 +2920,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 221657325261801149, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 221657325261801149, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.size
@@ -3153,6 +3157,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7947156806228824564, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
     - {fileID: 3197753845615794322, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
+    - {fileID: 17691611632178718, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 239dc2ff75f02cd4cafe67c68aef70fa, type: 3}
 --- !u!114 &4951532143838134062 stripped
 MonoBehaviour:

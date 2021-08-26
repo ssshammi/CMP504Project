@@ -27,31 +27,42 @@ public class MazeRenderer : MonoBehaviour
     [SerializeField]
     private Transform floorPrefab = null;
 
-
+    /*
+    [[137,133,141,137,131,131,131,133,139,133],[140,140,140,138,131,131,133,140,137,132],[140,138,134,137,131,133,140,140,140,140],[140,137,131,134,137,134,142,138,134,140],[140,140,137,131,132,137,131,131,131,134],[140,140,138,133,142,138,131,131,131,133],[138,134,137,134,137,131,129,129,135,140],[137,133,140,137,134,137,132,142,137,134],[140,138,134,138,133,140,142,137,134,141],[138,131,131,131,134,138,131,130,131,134]]
+[[137,131,131,133,137,131,129,131,133,141],[140,137,133,138,134,141,136,133,138,134],[140,140,138,131,133,140,142,138,129,133],[140,138,133,137,134,138,131,133,142,140],[138,133,140,138,131,133,141,138,131,134],[137,134,138,133,137,134,136,135,137,133],[140,137,131,134,138,133,138,129,134,140],[140,136,133,139,133,138,133,140,137,132],[140,142,140,137,134,137,134,142,140,140],[138,131,134,138,131,130,131,131,134,142]]
+   [[137,131,135,137,131,129,133,139,131,133],[136,131,131,134,137,134,138,133,137,132],[140,137,133,137,134,141,137,134,140,142],[140,140,142,138,133,140,138,133,138,133],[140,140,137,131,134,136,131,134,137,132],[140,140,138,131,133,138,133,139,132,140],[140,136,131,135,140,141,138,131,134,140],[140,140,137,131,134,136,133,137,133,140],[138,132,138,131,133,142,138,132,138,134],[139,130,131,135,138,131,135,138,131,135]]
+    */
     private WallState[,] mazememory;
     // Start is called before the first frame update
     void Start()
     {
         size = size + 0.05f;
         var maze = MazeGenerator.Generate(width, height);
-        Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.UP)));
-        Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.RIGHT)));
+        //Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.UP)));
+        //Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.RIGHT)));
 
-         Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.LEFT)));
-        Draw(maze);
-        mazememory =maze;
-        mazeContainer.localScale =new Vector3(10, 0.5f, 10);
+        // Debug.Log(JsonConvert.SerializeObject(maze[0,0].HasFlag(WallState.LEFT)));
+        string mazeJson = JsonConvert.SerializeObject(maze);
+        Debug.Log(mazeJson);
+        Debug.Log(JsonConvert.DeserializeObject<WallState[,]>(mazeJson));
+        //  WallState[,] stringMaze = JsonHelper.getJsonArray(mazeJson);
+        // Draw(stringMaze);
+        Draw(JsonConvert.DeserializeObject<WallState[,]>("[[137, 131, 135, 137, 131, 129, 133, 139, 131, 133],[136,131,131,134,137,134,138,133,137,132],[140,137,133,137,134,141,137,134,140,142],[140,140,142,138,133,140,138,133,138,133],[140,140,137,131,134,136,131,134,137,132],[140,140,138,131,133,138,133,139,132,140],[140,136,131,135,140,141,138,131,134,140],[140,140,137,131,134,136,133,137,133,140],[138,132,138,131,133,142,138,132,138,134],[139,130,131,135,138,131,135,138,131,135]]"));
+
+        mazememory = maze;
+        mazeContainer.localScale = new Vector3(10, 0.5f, 10);
         mazeContainer.Translate(new Vector3(56.0f, 0.0f, 56f));
 
     }
     //return a grid in visited flag flase
-    public WallState[,] getMaze(){
+    public WallState[,] getMaze()
+    {
 
-       /* foreach(var row in mazememory){
-              foreach(WallState cell in row)
+        /* foreach(var row in mazememory){
+               foreach(WallState cell in row)
 
-           cell |= WallState.VISITED;
-        }*/
+            cell |= WallState.VISITED;
+         }*/
 
         return mazememory;
     }
@@ -60,8 +71,8 @@ public class MazeRenderer : MonoBehaviour
     private void Draw(WallState[,] maze)
     {
 
-      //  var floor = Instantiate(floorPrefab, transform);
-     //   floor.localScale = new Vector3(width, 1, height);
+        //  var floor = Instantiate(floorPrefab, transform);
+        //   floor.localScale = new Vector3(width, 1, height);
 
         for (int i = 0; i < width; ++i)
         {
@@ -117,3 +128,6 @@ public class MazeRenderer : MonoBehaviour
 
     }
 }
+
+
+

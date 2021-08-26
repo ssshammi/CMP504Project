@@ -76,7 +76,7 @@ public class MazeAgent : Agent
     public GameArea mazeArea;
     public float timeBetweenDecisionsAtInference;
     float m_TimeSinceDecision;
-    private bool isFull; // If true, mouse has a full stomach
+    private int isFull; // If true, mouse has a full stomach
 
     /// <summary>
     /// Initial setup, called when the agent is enabled
@@ -84,6 +84,7 @@ public class MazeAgent : Agent
     public override void Initialize()
     {
         base.Initialize();
+
         gameArea = GetComponentInParent<GameArea>();
         gridLayout = mazeArea.mazeMap.GetComponent<MazeRenderer>().getMaze();
         rigidbody = GetComponent<Rigidbody>();
@@ -134,7 +135,7 @@ public class MazeAgent : Agent
         }
         else
         {
-            AddReward(-0.02f); // not able to complete in 200 steps
+            AddReward(-1.0f); // not able to complete in 200 steps
             EndEpisode();
         }
     }
@@ -270,7 +271,7 @@ public class MazeAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
-        isFull = false;
+        isFull = 10;
         gameArea.ResetArea();
     }
 
@@ -286,11 +287,14 @@ public class MazeAgent : Agent
 
         sensor.AddObservation(gameArea.getNumberOfTarget());
 
+
         // sensor.AddObservation(gameArea.getPostionOfTarget());
 
         // Direction mouse is facing (1 Vector3 = 3 values)
         sensor.AddObservation(transform.forward);
-
+        sensor.AddObservation(transform.rotation); //rotation
+        sensor.AddObservation(Vector3.Distance(gameArea.getPostionOfTarget(), transform.position));
+        sensor.AddObservation((gameArea.getPostionOfTarget() - transform.position).normalized);
         // 1 + 1 + 3 + 3 = 8 total values
     }
 
@@ -322,11 +326,11 @@ public class MazeAgent : Agent
     /// <param name="cheeseObject">The cheese to eat</param>
     private void Eatcheese(GameObject cheeseObject)
     {
-        if (isFull) return; // Can't eat another cheese while full
-                            // isFull = true; // need to  define max hunger
+        if (isFull == 0) return; // Can't eat another cheese while full
+                                 // isFull = true; // need to  define max hunger
 
         gameArea.RemoveSpecificcheese(cheeseObject);
-
+        isFull--;
         AddReward(10.0f / gameArea.getNumberOfTarget());
         CheckEnd();
     }
@@ -349,17 +353,17 @@ public class MazeAgent : Agent
      }*/
     private void CheckEnd()
     {
-        if (!isFull) return; // Nothing to regurgitate
-                             //      isFull = false;
-                             // Spawn heart
+        if (isFull <= 0) return; // Nothing to regurgitate
+                                 //      isFull = false;
+                                 // Spawn heart
         GameObject heart = Instantiate<GameObject>(heartPrefab);
         heart.transform.parent = transform.parent;
-        heart.transform.position = transform.position + Vector3.up;
-        Destroy(heart, 4f);
+        heart.transform.position = transform.position + Vector3.up * 5;
+        Destroy(heart, 4);
 
 
 
-        if (gameArea.cheeseRemaining <= 0)
+        if (isFull <= 0)
         {
             EndEpisode();
         }
