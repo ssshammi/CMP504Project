@@ -135,7 +135,7 @@ public class MazeAgent : Agent
         }
         else
         {
-            AddReward(-1.0f); // not able to complete in 200 steps
+            AddReward(-1.0f); // not able to complete in max steps
             EndEpisode();
         }
     }
@@ -293,8 +293,11 @@ public class MazeAgent : Agent
         // Direction mouse is facing (1 Vector3 = 3 values)
         sensor.AddObservation(transform.forward);
         sensor.AddObservation(transform.rotation); //rotation
-        sensor.AddObservation(Vector3.Distance(gameArea.getPostionOfTarget(), transform.position));
-        sensor.AddObservation((gameArea.getPostionOfTarget() - transform.position).normalized);
+        if (gameArea.getPostionOfTarget() != Vector3.zero)
+        {
+            sensor.AddObservation(Vector3.Distance(gameArea.getPostionOfTarget(), transform.position));
+            sensor.AddObservation((gameArea.getPostionOfTarget() - transform.position).normalized);
+        }
         // 1 + 1 + 3 + 3 = 8 total values
     }
 

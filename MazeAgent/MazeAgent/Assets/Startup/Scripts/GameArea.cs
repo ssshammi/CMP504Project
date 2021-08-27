@@ -194,7 +194,7 @@ public class GameArea : MonoBehaviour
 
 
         float minDistance = float.MaxValue;
-        GameObject closestFood = null;
+        Vector3 closestFood = Vector3.zero;
         for (int i = 0; i < cheeseList.Count; i++)
         {
 
@@ -204,11 +204,11 @@ public class GameArea : MonoBehaviour
             if (thisDistance < minDistance)
             {
                 minDistance = thisDistance;
-                closestFood = cheeseList[i];
+                closestFood = cheeseList[i].transform.position;
             }
 
         }
-        return closestFood.transform.position;
+        return closestFood;
 
     }
 

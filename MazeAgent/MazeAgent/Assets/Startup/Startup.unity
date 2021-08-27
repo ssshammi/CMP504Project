@@ -2873,6 +2873,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor
       objectReference: {fileID: 0}
+    - target: {fileID: 2496792292136774291, guid: 6321849fc83dc44d5ae9e4d821860790, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5737
+      objectReference: {fileID: 0}
+    - target: {fileID: 2496792292136774291, guid: 6321849fc83dc44d5ae9e4d821860790, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -189
+      objectReference: {fileID: 0}
+    - target: {fileID: 5051503692658571383, guid: 6321849fc83dc44d5ae9e4d821860790, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -976
+      objectReference: {fileID: 0}
+    - target: {fileID: 5051503692658571383, guid: 6321849fc83dc44d5ae9e4d821860790, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -5911
+      objectReference: {fileID: 0}
+    - target: {fileID: 5051503692658571383, guid: 6321849fc83dc44d5ae9e4d821860790, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6321849fc83dc44d5ae9e4d821860790, type: 3}
 --- !u!1001 &4951532143838134061
