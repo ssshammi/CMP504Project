@@ -318,7 +318,7 @@ public class MazeAgent : Agent
         {
             // Try to eat the cheese
 
-            AddReward(-0.1f);
+            AddReward(-1.0f);
         }
 
     }
@@ -329,8 +329,8 @@ public class MazeAgent : Agent
     /// <param name="cheeseObject">The cheese to eat</param>
     private void Eatcheese(GameObject cheeseObject)
     {
-        if (isFull == 0) return; // Can't eat another cheese while full
-                                 // isFull = true; // need to  define max hunger
+        // if (isFull == 0) return; // Can't eat another cheese while full
+        // isFull = true; // need to  define max hunger
 
         gameArea.RemoveSpecificcheese(cheeseObject);
         isFull--;
@@ -356,9 +356,9 @@ public class MazeAgent : Agent
      }*/
     private void CheckEnd()
     {
-        if (isFull <= 0) return; // Nothing to regurgitate
-                                 //      isFull = false;
-                                 // Spawn heart
+        // if (isFull <= 0) return; // Nothing to regurgitate
+        //      isFull = false;
+        // Spawn heart
         GameObject heart = Instantiate<GameObject>(heartPrefab);
         heart.transform.parent = transform.parent;
         heart.transform.position = transform.position + Vector3.up * 5;
