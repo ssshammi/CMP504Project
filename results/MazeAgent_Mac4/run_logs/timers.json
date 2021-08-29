@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1629468660",
+        "python_version": "3.7.9 (v3.7.9:13c94747c7, Aug 15 2020, 01:31:08) \n[Clang 6.0 (clang-600.0.57)]",
+        "command_line_arguments": "/Library/Frameworks/Python.framework/Versions/3.7/bin/mlagents-learn config/ppo/MazeAgent.yaml --run-id MazeAgent_Mac4 --force",
+        "mlagents_version": "0.27.0.dev0",
+        "mlagents_envs_version": "0.27.0.dev0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1",
+        "numpy_version": "1.18.5",
+        "end_time_seconds": "1629468720"
+    },
+    "total": 60.56814933700001,
+    "count": 1,
+    "self": 0.01661139100000497,
+    "children": {
+        "run_training.setup": {
+            "total": 0.9140664629999993,
+            "count": 1,
+            "self": 0.9140664629999993
+        },
+        "TrainerController.start_learning": {
+            "total": 59.637471483000006,
+            "count": 1,
+            "self": 0.00029944900001765973,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 59.637068768999995,
+                    "count": 1,
+                    "self": 59.637068768999995
+                },
+                "TrainerController._save_models": {
+                    "total": 0.00010326499999280259,
+                    "count": 1,
+                    "self": 0.00010326499999280259
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1630037710",
+        "python_version": "3.7.9 (v3.7.9:13c94747c7, Aug 15 2020, 01:31:08) \n[Clang 6.0 (clang-600.0.57)]",
+        "command_line_arguments": "/Library/Frameworks/Python.framework/Versions/3.7/bin/mlagents-learn config/ppo/MazeAgent.yaml --run-id MazeAgent_idiothetic_input4",
+        "mlagents_version": "0.27.0.dev0",
+        "mlagents_envs_version": "0.27.0.dev0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1",
+        "numpy_version": "1.18.5",
+        "end_time_seconds": "1630037770"
+    },
+    "total": 60.1502219,
+    "count": 1,
+    "self": 0.018667850000007036,
+    "children": {
+        "run_training.setup": {
+            "total": 0.08726085699999953,
+            "count": 1,
+            "self": 0.08726085699999953
+        },
+        "TrainerController.start_learning": {
+            "total": 60.044293192999994,
+            "count": 1,
+            "self": 0.00022021799999549785,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 60.043973493,
+                    "count": 1,
+                    "self": 60.043973493
+                },
+                "TrainerController._save_models": {
+                    "total": 9.948199999598728e-05,
+                    "count": 1,
+                    "self": 9.948199999598728e-05
+                }
+            }
+        }
+    }
+}
